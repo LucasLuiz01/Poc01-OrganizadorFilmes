@@ -5,10 +5,11 @@ export type movieDados = {
     idPlataform: number,
     idMovie: number,
     username: string,
-    whatched: boolean,
+    watched: boolean,
     note?: string,
     summary?: string
 }
 
-export type moviePlatform = Omit<movieDados, "id" | "whatched"| "note"| "summary"| "username"| "idMovie">
+export type moviePlatform = Omit<movieDados, "id" | "watched"| "note"| "summary"| "username"| "idMovie">
 export type userMovieStatus = Omit<movieDados, "id" | "name" | "idGenre" | "idPlataform">
+export type updateMovieStatus = Omit<movieDados,  "name" | "idGenre" | "idPlataform"| "idMovie"| "username">

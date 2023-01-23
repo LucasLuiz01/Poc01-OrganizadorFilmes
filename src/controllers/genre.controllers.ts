@@ -3,19 +3,19 @@ import { insertGenre } from "../repositories/genre.repositories.js";
 import { genreSchema } from "../schemas/genre.schema.js";
 
 export async function insertGenres(req:Request, res:Response){
-    const genreName: string = req.body;
-    const {error} = genreSchema.validate(genreName);
+    const {genreName} = req.body;
+    const nome: string = genreName
+    const {error} = genreSchema.validate(req.body);
     if( error){
         return res.status(400).send({
             message: error.message
         })
     }
-    console.log(genreName);
-    if(!genreName){
+    if(!nome){
         return res.sendStatus(400);
     }
     try{
-        await insertGenre(genreName)
+        await insertGenre(nome)
         res.status(200).send("INSIRIDO COM SUCESSO");
     }catch(err){
         console.log(err);

@@ -1,6 +1,6 @@
 import { connection } from "../database/db.js";
 import { QueryResult } from "pg";
-import { movieDados, moviePlatform, userMovieStatus } from "../protocols/movie.protocols.js";
+import { movieDados, moviePlatform, userMovieStatus, updateMovieStatus } from "../protocols/movie.protocols.js";
 
 export async function insertMov (dados:moviePlatform): Promise<void> {
     await connection.query('INSERT INTO movie (name, "idGenre") VALUES ($1, $2)', [dados.name, dados.idGenre]); 
@@ -13,6 +13,20 @@ export async function insertuserMovieStats (userDados:userMovieStatus): Promise<
     if(userStatusExistente.rows.length !== 0){
         return "FILME STATUS JÁ CADASTRADO PARA ESTE USÚARIO";
     }
-    await connection.query('INSERT INTO "user{Status" (username, "idMovie", watched, note, summary) VALUES ($1, $2, $3, $4, $5)', [userDados.username, userDados.idMovie, userDados.whatched,userDados.note, userDados.summary]); 
+    await connection.query('INSERT INTO "userMovieStatus" (username, "idMovie", watched, note, summary) VALUES ($1, $2, $3, $4, $5)', [userDados.username, userDados.idMovie, userDados.watched,userDados.note, userDados.summary]); 
 }
 
+export async function updateMovieStats (userDados:updateMovieStatus): Promise<string> {
+    const userStatusExistente: QueryResult = await connection.query('SELECT * from "userMovieStatus" WHERE id = $1',[userDados.id])
+    if(userStatusExistente.rows.length === 0){
+        return "User status não existente";
+    }
+    await connection.query('UPDATE "userMovieStatus" SET watched = $1, summary = $2, note =$3 WHERE id = $4', [userDados.watched, userDados.summary, userDados.note, userDados.id]); 
+}
+export async function deleteUserStatus(id:number):Promise<string> {
+    const userStatusExistente: QueryResult = await connection.query('SELECT * from "userMovieStatus" WHERE id = $1',[id])
+    if(userStatusExistente.rows.length === 0){
+        return "User status não existente";
+    }
+    await connection.query('DELETE FROM "userMovieStatus" WHERE id = $1', [id])
+}
