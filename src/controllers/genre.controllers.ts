@@ -3,8 +3,8 @@ import { insertGenre } from "../repositories/genre.repositories.js";
 import { genreSchema } from "../schemas/genre.schema.js";
 
 export async function insertGenres(req:Request, res:Response){
-    const {genreName} = req.body;
-    const nome: string = genreName
+    const {name} = req.body;
+    const nome: string = name
     const {error} = genreSchema.validate(req.body);
     if( error){
         return res.status(400).send({

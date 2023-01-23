@@ -1,4 +1,4 @@
-import { movieDados, moviePlatform, userMovieStatus, updateMovieStatus } from "../protocols/movie.protocols.js";
+import { moviePlatform, userMovieStatus, updateMovieStatus } from "../protocols/movie.protocols.js";
 import { Request, Response } from "express";
 import { movieSchema } from "../schemas/movie.schema.js";
 import { insertMov, insertuserMovieStats, updateMovieStats, deleteUserStatus } from "../repositories/movie.repositories.js";
@@ -14,7 +14,10 @@ if( error){
     })
 }
 try {
-    await insertMov(dados)
+    const insert: string = await insertMov(dados);
+    if(insert){
+        return res.status(404).send(insert)
+    }
     res.status(200).send("INSIRIDO COM SUCESSO");
 }catch(err){
     console.log(err);
